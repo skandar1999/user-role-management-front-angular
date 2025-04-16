@@ -1,0 +1,250 @@
+<div class="d-flex" id="wrapper">
+  <!-- Sidebar -->
+  <div class="bg-white" id="sidebar-wrapper">
+    <div
+      class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"
+    >
+      <i class="fas fa-user-secret me-2"></i>Admin
+    </div>
+    <div class="list-group list-group-flush my-3">
+      <a
+        routerLink="/"
+        class="list-group-item list-group-item-action bg-transparent second-text active"
+      >
+        <i class="fas fa-user-plus me-2"></i>Add User
+      </a>
+
+      <a
+        routerLink="/users"
+        class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+      >
+        <i class="fas fa-users me-2"></i>Users List
+      </a>
+
+      <a
+        routerLink="/"
+        class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+      >
+        <i class="fas fa-user-shield me-2"></i>Permission list
+      </a>
+
+      <a
+        routerLink="/"
+        class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+      >
+        <i class="fas fa-history me-2"></i>Historique Action
+      </a>
+
+      <a
+        href="/login"
+        class="list-group-item list-group-item-action bg-transparent text-danger fw-bold"
+      >
+        <i class="fas fa-sign-out-alt me-2"></i>Logout
+      </a>
+    </div>
+  </div>
+  <!-- /#sidebar-wrapper -->
+
+  <!-- Page Content -->
+  <div id="page-content-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-light bg-transparent py-4 px-4">
+      <div class="d-flex align-items-center">
+        <i
+          class="fas fa-align-left primary-text fs-4 me-3"
+          id="menu-toggle"
+        ></i>
+        <h2 class="fs-2 m-0">Add new User</h2>
+      </div>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item dropdown">
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Profile</a></li>
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><a class="dropdown-item" href="#">Logout</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+      <div class="row g-3 my-2">
+        <!-- Utilisateurs -->
+        <div class="col-md-3">
+          <div
+            class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
+          >
+            <div>
+              <h3 class="fs-2">12</h3>
+              <p class="fs-5 mb-0">Utilisateurs</p>
+            </div>
+            <i
+              class="fas fa-user fs-1 primary-text border rounded-full secondary-bg p-3"
+            ></i>
+          </div>
+        </div>
+
+        <!-- Rôles -->
+        <div class="col-md-3">
+          <div
+            class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
+          >
+            <div>
+              <h3 class="fs-2">4</h3>
+              <p class="fs-5 mb-0">Rôles</p>
+            </div>
+            <i
+              class="fas fa-user-shield fs-1 primary-text border rounded-full secondary-bg p-3"
+            ></i>
+          </div>
+        </div>
+
+        <!-- Permissions -->
+        <div class="col-md-3">
+          <div
+            class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
+          >
+            <div>
+              <h3 class="fs-2">10</h3>
+              <p class="fs-5 mb-0">Permissions</p>
+            </div>
+            <i
+              class="fas fa-lock fs-1 primary-text border rounded-full secondary-bg p-3"
+            ></i>
+          </div>
+        </div>
+
+        <!-- Historique des Actions -->
+        <div class="col-md-3">
+          <div
+            class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
+          >
+            <div>
+              <h3 class="fs-2">30</h3>
+              <p class="fs-5 mb-0">Historique</p>
+            </div>
+            <i
+              class="fas fa-history fs-1 primary-text border rounded-full secondary-bg p-3"
+            ></i>
+          </div>
+        </div>
+      </div>
+
+      <section class="text-center">
+        <div class="p-5 bg-image" style="height: 150px"></div>
+
+        <div
+          class="card mx-4 mx-md-5 shadow-5-strong"
+          style="
+            margin-top: -100px;
+            margin-bottom: 50px;
+            background: hsla(0, 0%, 100%, 0.8);
+            backdrop-filter: blur(30px);
+          "
+        >
+          <div class="card-body py-5 px-md-5">
+            <div class="row mt-0">
+              <h3 class="fs-4 mb-3">Add new User</h3>
+              <div class="col">
+                <form (ngSubmit)="onSubmit()" [formGroup]="userForm">
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="nom">Nom</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nom"
+                          formControlName="nom"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="email">Email</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="email"
+                          formControlName="email"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="motDePasse"
+                      >Mot de passe</label
+                    >
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="motDePasse"
+                      formControlName="motDePasse"
+                      required
+                    />
+                  </div>
+
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="role">Rôle</label>
+                    <select
+                      class="form-control custom-select"
+                      id="role"
+                      formControlName="role"
+                      required
+                    >
+                      <option value="" selected>Sélectionner un rôle</option>
+                      <option *ngFor="let role of roles" [value]="role.id">
+                        {{ role.nom }}
+                      </option>
+                    </select>
+                  </div>
+
+                  <!-- Actif -->
+                  <div class="form-outline mb-4">
+                    <label class="form-label" for="actif">Actif</label>
+                    <select
+                      class="form-control"
+                      id="actif"
+                      formControlName="actif"
+                      required
+                    >
+                      <option value="true">Oui</option>
+                      <option value="false">Non</option>
+                    </select>
+                  </div>
+
+                  <!-- Submit -->
+                  <button
+                    type="submit"
+                    class="btn btn-dark"
+                    [disabled]="userForm.invalid"
+                  >
+                    Confirmer
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
