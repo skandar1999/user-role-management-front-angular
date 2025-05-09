@@ -1,5 +1,4 @@
 <div class="d-flex" id="wrapper">
-  <!-- Sidebar -->
   <div class="bg-white" id="sidebar-wrapper">
     <div
       class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"
@@ -8,17 +7,18 @@
     </div>
     <div class="list-group list-group-flush my-3">
       <a
-        routerLink="/adduser"
-        class="list-group-item list-group-item-action bg-transparent second-text active"
-      >
-        <i class="fas fa-user-plus me-2"></i>Add User
-      </a>
-
-      <a
         routerLink="/"
         class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
       >
-        <i class="fas fa-users me-2"></i>Users List
+        <i class="fas fa-user-plus me-2"></i>User Management
+      </a>
+      <a
+        routerLink="/role"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
+      >
+        <i class="fas fa-users me-2"></i>Role Management
       </a>
 
       <a
@@ -29,7 +29,7 @@
       </a>
 
       <a
-        routerLink="/"
+        routerLink="/historique"
         class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
       >
         <i class="fas fa-history me-2"></i>Historique Action
@@ -43,6 +43,7 @@
       </a>
     </div>
   </div>
+
   <!-- /#sidebar-wrapper -->
 
   <!-- Page Content -->
@@ -158,38 +159,87 @@
         >
           <div class="card-body py-5 px-md-5">
             <div class="row mt-0">
-              <h3 class="fs-4 mb-4">Liste des Utilisateurs</h3>
-
+              <h3 class="fs-4 mb-3">Role Management</h3>
               <div class="col">
-                <table class="table bg-white rounded shadow-sm table-hover">
-                  <thead class="bg-light">
+                <form (ngSubmit)="onSubmit()" [formGroup]="roleForm">
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="nom">Nom</label>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="nom"
+                          formControlName="nom"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="description"
+                          >Description</label
+                        >
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="description"
+                          formControlName="description"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Submit and Cancel buttons -->
+                  <button
+                    type="submit"
+                    class="btn btn-dark"
+                    [disabled]="roleForm.invalid"
+                  >
+                    {{ selectedRoleId ? "Mettre à jour" : "Confirmer" }}
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-secondary ms-2"
+                    *ngIf="selectedRoleId"
+                    (click)="cancelEdit()"
+                  >
+                    Annuler
+                  </button>
+                </form>
+
+                <!-- Table to display roles -->
+                <table class="table mt-4">
+                  <thead>
                     <tr>
+                      <th>ID</th>
                       <th>Nom</th>
-                      <th>Email</th>
-                      <th>Rôle</th>
-                      <th>Actif</th>
+                      <th>Description</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let user of users">
-                      <td>{{ user.nom }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>{{ user.role.nom }}</td>
-                      <td>{{ user.actif ? "Oui" : "Non" }}</td>
+                    <tr *ngFor="let role of roles">
+                      <td>{{ role.id }}</td>
+                      <td>{{ role.nom }}</td>
+                      <td>{{ role.description }}</td>
+
                       <td>
                         <button
-                          class="btn btn-danger btn-sm"
-                          (click)="deleteUser(user.id!)"
-                        >
-                          <i class="fas fa-trash"></i> Supprimer
-                        </button>
-                        <!-- <button
                           class="btn btn-primary btn-sm"
-                          (click)="editUser(user.id)"
+                          (click)="editRole(role)"
                         >
-                          <i class="fas fa-edit"></i>
-                        </button>  -->
+                          Modifier
+                        </button>
+                        <button
+                          class="btn btn-danger btn-sm"
+                          (click)="deleteRole(role.id)"
+                        >
+                          Supprimer
+                        </button>
                       </td>
                     </tr>
                   </tbody>

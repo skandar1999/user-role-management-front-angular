@@ -74,7 +74,7 @@
 
 .list-group-item.active {
   background-color: transparent;
-  color: var(--main-text-color);
+  color: #03794d;
   font-weight: bold;
   border: none;
 }

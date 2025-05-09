@@ -6,10 +6,11 @@ import { AppComponent } from './app.component';
 import { AddUserComponent } from './components/add-user/add-user.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { ListeUsersComponent } from './components/liste-users/liste-users.component';
+import { RoleManagementComponent } from './components/role-management/role-management/role-management.component';
+import { HistoriqueListComponent } from './components/historique-list/historique-list.component';
 
 @NgModule({
-  declarations: [AppComponent, AddUserComponent, ListeUsersComponent],
+  declarations: [AppComponent, AddUserComponent, RoleManagementComponent, HistoriqueListComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

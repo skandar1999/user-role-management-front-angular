@@ -1,5 +1,4 @@
 <div class="d-flex" id="wrapper">
-  <!-- Sidebar -->
   <div class="bg-white" id="sidebar-wrapper">
     <div
       class="sidebar-heading text-center py-4 primary-text fs-4 fw-bold text-uppercase border-bottom"
@@ -9,16 +8,18 @@
     <div class="list-group list-group-flush my-3">
       <a
         routerLink="/"
-        class="list-group-item list-group-item-action bg-transparent second-text active"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="list-group-item list-group-item-action bg-transparent second-text"
       >
-        <i class="fas fa-user-plus me-2"></i>Add User
+        <i class="fas fa-user-plus me-2"></i>User Management
       </a>
 
       <a
-        routerLink="/users"
+        routerLink="/role"
         class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
       >
-        <i class="fas fa-users me-2"></i>Users List
+        <i class="fas fa-users me-2"></i>Role Management
       </a>
 
       <a
@@ -29,7 +30,7 @@
       </a>
 
       <a
-        routerLink="/"
+        routerLink="/historique"
         class="list-group-item list-group-item-action bg-transparent second-text fw-bold"
       >
         <i class="fas fa-history me-2"></i>Historique Action
@@ -43,7 +44,6 @@
       </a>
     </div>
   </div>
-  <!-- /#sidebar-wrapper -->
 
   <!-- Page Content -->
   <div id="page-content-wrapper">
@@ -143,45 +143,48 @@
           </div>
         </div>
       </div>
-
       <section class="text-center">
+        <!-- Hero background -->
         <div class="p-5 bg-image" style="height: 150px"></div>
 
+        <!-- Card overlay -->
         <div
           class="card mx-4 mx-md-5 shadow-5-strong"
           style="
             margin-top: -100px;
             margin-bottom: 50px;
-            background: hsla(0, 0%, 100%, 0.8);
-            backdrop-filter: blur(30px);
+            background: hsla(0, 0%, 100%, 0.85);
+            backdrop-filter: blur(20px);
           "
         >
           <div class="card-body py-5 px-md-5">
-            <div class="row mt-0">
-              <h3 class="fs-4 mb-3">Add new User</h3>
+            <!-- Title -->
+            <h3 class="fs-4 mb-4 fw-semibold text-primary">User Management</h3>
+
+            <div class="row">
               <div class="col">
+                <!-- User form -->
                 <form (ngSubmit)="onSubmit()" [formGroup]="userForm">
                   <div class="row">
                     <div class="col-md-6 mb-4">
                       <div class="form-outline">
-                        <label class="form-label" for="nom">Nom</label>
+                        <label class="form-label" for="nom">Full Name</label>
                         <input
                           type="text"
-                          class="form-control"
                           id="nom"
+                          class="form-control"
                           formControlName="nom"
                           required
                         />
                       </div>
                     </div>
-
                     <div class="col-md-6 mb-4">
                       <div class="form-outline">
                         <label class="form-label" for="email">Email</label>
                         <input
                           type="email"
-                          class="form-control"
                           id="email"
+                          class="form-control"
                           formControlName="email"
                           required
                         />
@@ -189,57 +192,120 @@
                     </div>
                   </div>
 
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="motDePasse"
-                      >Mot de passe</label
-                    >
-                    <input
-                      type="password"
-                      class="form-control"
-                      id="motDePasse"
-                      formControlName="motDePasse"
-                      required
-                    />
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="motDePasse"
+                          >Password</label
+                        >
+                        <input
+                          type="password"
+                          id="motDePasse"
+                          class="form-control"
+                          formControlName="motDePasse"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="role">Role</label>
+                        <select
+                          id="role"
+                          class="form-control"
+                          formControlName="role"
+                          required
+                        >
+                          <option value="" disabled selected>
+                            Select a role
+                          </option>
+                          <option *ngFor="let role of roles" [value]="role.id">
+                            {{ role.nom }}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
 
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="role">Rôle</label>
-                    <select
-                      class="form-control custom-select"
-                      id="role"
-                      formControlName="role"
-                      required
-                    >
-                      <option value="" selected>Sélectionner un rôle</option>
-                      <option *ngFor="let role of roles" [value]="role.id">
-                        {{ role.nom }}
-                      </option>
-                    </select>
+                  <div class="row">
+                    <div class="col-md-6 mb-4">
+                      <div class="form-outline">
+                        <label class="form-label" for="actif">Active</label>
+                        <select
+                          id="actif"
+                          class="form-control"
+                          formControlName="actif"
+                          required
+                        >
+                          <option value="true">Active</option>
+                          <option value="false">Inactive</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
 
-                  <!-- Actif -->
-                  <div class="form-outline mb-4">
-                    <label class="form-label" for="actif">Actif</label>
-                    <select
-                      class="form-control"
-                      id="actif"
-                      formControlName="actif"
-                      required
-                    >
-                      <option value="true">Oui</option>
-                      <option value="false">Non</option>
-                    </select>
-                  </div>
-
-                  <!-- Submit -->
+                  <!-- Buttons -->
                   <button
                     type="submit"
                     class="btn btn-dark"
                     [disabled]="userForm.invalid"
                   >
-                    Confirmer
+                    {{ selectedUserId ? "Update User" : "Add User" }}
+                  </button>
+
+                  <button
+                    type="button"
+                    class="btn btn-secondary ms-2"
+                    *ngIf="selectedUserId"
+                    (click)="cancelEdit()"
+                  >
+                    Cancel
                   </button>
                 </form>
+
+                <input
+                  type="text"
+                  #searchInput
+                  class="form-control w-25 shadow-sm rounded-pill px-4"
+                  placeholder="Search users..."
+                  (input)="searchUtilisateurs(searchInput.value)"
+                />
+                <!-- User table -->
+                <table class="table table-hover mt-5">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Full Name</th>
+                      <th>Email</th>
+                      <th>Role</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let user of users">
+                      <td>{{ user.id }}</td>
+                      <td>{{ user.nom }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>{{ user.role.nom }}</td>
+                      <td>{{ user.actif ? "Active" : "Inactive" }}</td>
+                      <td>
+                        <button
+                          class="btn btn-primary btn-sm"
+                          (click)="editUser(user)"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          class="btn btn-danger btn-sm ms-2"
+                          (click)="deleteUser(user.id!)"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
