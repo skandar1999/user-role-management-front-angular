@@ -8,14 +8,23 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RoleManagementComponent } from './components/role-management/role-management/role-management.component';
 import { HistoriqueListComponent } from './components/historique-list/historique-list.component';
+import { FormsModule } from '@angular/forms';
+import { SignInComponent } from './components/sign-in/sign-in.component';
 
 @NgModule({
-  declarations: [AppComponent, AddUserComponent, RoleManagementComponent, HistoriqueListComponent],
+  declarations: [
+    AppComponent,
+    AddUserComponent,
+    RoleManagementComponent,
+    HistoriqueListComponent,
+    SignInComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

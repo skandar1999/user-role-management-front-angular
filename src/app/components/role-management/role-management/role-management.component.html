@@ -145,108 +145,167 @@
         </div>
       </div>
 
-      <section class="text-center">
-        <div class="p-5 bg-image" style="height: 150px"></div>
-
+      <section class="container py-5">
         <div
-          class="card mx-4 mx-md-5 shadow-5-strong"
-          style="
-            margin-top: -100px;
-            margin-bottom: 50px;
-            background: hsla(0, 0%, 100%, 0.8);
-            backdrop-filter: blur(30px);
-          "
+          class="bg-primary text-white text-center py-4 rounded shadow-sm mb-4"
         >
-          <div class="card-body py-5 px-md-5">
-            <div class="row mt-0">
-              <h3 class="fs-4 mb-3">Role Management</h3>
-              <div class="col">
-                <form (ngSubmit)="onSubmit()" [formGroup]="roleForm">
-                  <div class="row">
-                    <div class="col-md-6 mb-4">
-                      <div class="form-outline">
-                        <label class="form-label" for="nom">Nom</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="nom"
-                          formControlName="nom"
-                          required
-                        />
-                      </div>
-                    </div>
+          <h2 class="mb-0">Gestion des Rôles & Permissions</h2>
+        </div>
 
-                    <div class="col-md-6 mb-4">
-                      <div class="form-outline">
-                        <label class="form-label" for="description"
-                          >Description</label
-                        >
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="description"
-                          formControlName="description"
-                          required
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Submit and Cancel buttons -->
-                  <button
-                    type="submit"
-                    class="btn btn-dark"
-                    [disabled]="roleForm.invalid"
+        <div class="card shadow-sm p-4">
+          <h4 class="mb-4">
+            {{ selectedRoleId ? "Modifier un Rôle" : "Ajouter un Rôle" }}
+          </h4>
+          <form [formGroup]="roleForm" (ngSubmit)="onSubmit()" class="row g-3">
+            <div class="col-md-6">
+              <label for="nom" class="form-label">Nom</label>
+              <input
+                formControlName="nom"
+                id="nom"
+                type="text"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label for="description" class="form-label">Description</label>
+              <input
+                formControlName="description"
+                id="description"
+                type="text"
+                class="form-control"
+                required
+              />
+            </div>
+            <div class="col-12">
+              <label class="form-label">Permission</label>
+              <div class="d-flex flex-column">
+                <div
+                  *ngFor="let permission of availablePermissions"
+                  class="form-check"
+                >
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    [value]="permission.id"
+                    formControlName="permissionId"
+                    [id]="'permission-' + permission.id"
+                  />
+                  <label
+                    class="form-check-label"
+                    [for]="'permission-' + permission.id"
                   >
-                    {{ selectedRoleId ? "Mettre à jour" : "Confirmer" }}
-                  </button>
-
-                  <button
-                    type="button"
-                    class="btn btn-secondary ms-2"
-                    *ngIf="selectedRoleId"
-                    (click)="cancelEdit()"
-                  >
-                    Annuler
-                  </button>
-                </form>
-
-                <!-- Table to display roles -->
-                <table class="table mt-4">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Nom</th>
-                      <th>Description</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let role of roles">
-                      <td>{{ role.id }}</td>
-                      <td>{{ role.nom }}</td>
-                      <td>{{ role.description }}</td>
-
-                      <td>
-                        <button
-                          class="btn btn-primary btn-sm"
-                          (click)="editRole(role)"
-                        >
-                          Modifier
-                        </button>
-                        <button
-                          class="btn btn-danger btn-sm"
-                          (click)="deleteRole(role.id)"
-                        >
-                          Supprimer
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                    {{ permission.nom }} ({{ permission.description }})
+                  </label>
+                </div>
+                <div
+                  *ngIf="availablePermissions.length === 0"
+                  class="text-muted"
+                >
+                  Aucune permission disponible
+                </div>
               </div>
             </div>
-          </div>
+            <div class="col-12">
+              <button
+                [disabled]="roleForm.invalid"
+                class="btn btn-success me-2"
+              >
+                {{ selectedRoleId ? "Mettre à Jour" : "Créer" }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                *ngIf="selectedRoleId"
+                (click)="cancelEdit()"
+              >
+                Annuler
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-responsive mt-5">
+          <table class="table table-bordered table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Permissions</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let role of roles">
+                <td>{{ role.id }}</td>
+                <td>{{ role.nom }}</td>
+                <td>{{ role.description }}</td>
+                <td>
+                  <ul class="list-unstyled mb-0">
+                    <li
+                      *ngFor="let perm of role.permissions"
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      {{ perm.nom }}
+                      <button
+                        class="btn btn-outline-danger btn-sm ms-2"
+                        (click)="removePermission(role.id!, perm.id)"
+                        title="Supprimer la permission"
+                      >
+                        <i class="bi bi-x-circle"></i>
+                      </button>
+                    </li>
+                    <li
+                      *ngIf="!role.permissions || role.permissions.length === 0"
+                      class="text-muted fst-italic"
+                    >
+                      Aucune permission
+                    </li>
+                  </ul>
+                  <div class="input-group input-group-sm mt-2">
+                    <select
+                      class="form-select form-select-sm"
+                      [(ngModel)]="selectedPermissionId[role.id!]"
+                      [ngModelOptions]="{ standalone: true }"
+                      aria-label="Sélectionner une permission"
+                    >
+                      <option [value]="null" disabled selected>
+                        Sélectionner
+                      </option>
+                      <option
+                        *ngFor="let permission of availablePermissions"
+                        [value]="permission.id"
+                      >
+                        {{ permission.nom }}
+                      </option>
+                    </select>
+                    <button
+                      class="btn btn-outline-success btn-sm"
+                      (click)="addPermissionToRole(role.id!)"
+                      [disabled]="selectedPermissionId[role.id!] === null"
+                    >
+                      Ajouter
+                    </button>
+                  </div>
+                </td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm me-1"
+                    (click)="editRole(role)"
+                  >
+                    <i class="bi bi-pencil-square"></i>
+                  </button>
+                  <button
+                    class="btn btn-danger btn-sm"
+                    (click)="deleteRole(role.id!)"
+                  >
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </section>
     </div>

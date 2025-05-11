@@ -93,3 +93,31 @@
     margin-left: -15rem;
   }
 }
+
+.form-check {
+  margin-bottom: 0.5rem;
+}
+
+.form-check-label {
+  margin-left: 0.5rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.form-select-sm {
+  max-width: 200px;
+}
+
+.input-group {
+  max-width: 300px;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+}
+
+.list-unstyled li {
+  padding: 0.2rem 0;
+}

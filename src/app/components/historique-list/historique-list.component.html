@@ -92,7 +92,7 @@
             class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
           >
             <div>
-              <h3 class="fs-2">12</h3>
+              <h3 class="fs-2">{{ countUtilisateurs() }}</h3>
               <p class="fs-5 mb-0">Utilisateurs</p>
             </div>
             <i
@@ -107,7 +107,7 @@
             class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
           >
             <div>
-              <h3 class="fs-2">4</h3>
+              <h3 class="fs-2">{{ countRoles() }}</h3>
               <p class="fs-5 mb-0">Rôles</p>
             </div>
             <i
@@ -137,7 +137,7 @@
             class="p-3 bg-white shadow-sm d-flex justify-content-around align-items-center rounded"
           >
             <div>
-              <h3 class="fs-2">30</h3>
+              <h3 class="fs-2">{{ countHistoriqueActions() }}</h3>
               <p class="fs-5 mb-0">Historique</p>
             </div>
             <i
@@ -146,7 +146,6 @@
           </div>
         </div>
       </div>
-
       <section class="text-center">
         <div class="p-5 bg-image" style="height: 150px"></div>
 
@@ -161,21 +160,93 @@
         >
           <div class="card-body py-5 px-md-5">
             <div class="row mt-0">
-              <h3 class="fs-4 mb-3">Historique Management</h3>
+              <h3 class="fs-4 mb-3 text-primary">Historique Management</h3>
+
+              <!-- Stats Section -->
+              <div class="mb-4">
+                <div class="row g-3 text-start">
+                  <div class="col-md-4">
+                    <div class="card bg-light p-3">
+                      <h6 class="fw-bold">Total Actions</h6>
+                      <p class="mb-0">{{ countHistoriqueActions() }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card bg-light p-3">
+                      <h6 class="fw-bold">Actions Utilisateur</h6>
+                      <p class="mb-0">{{ countUtilisateurs() }}</p>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card bg-light p-3">
+                      <h6 class="fw-bold">Actions Role</h6>
+                      <p class="mb-0">{{ countRoles() }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Filter Dropdown -->
+              <div class="mb-3 text-start">
+                <label for="typeFilter" class="form-label fw-bold text-dark"
+                  >Filtrer par type:</label
+                >
+                <div class="custom-select-container d-flex align-items-center">
+                  <select
+                    [(ngModel)]="selectedType"
+                    id="typeFilter"
+                    class="form-select form-select-lg w-auto me-2"
+                    aria-label="Select action type"
+                  >
+                    <option value="">Tous</option>
+                    <option value="Utilisateur">Utilisateur</option>
+                    <option value="Role">Role</option>
+                    <option value="Autre">Autre</option>
+                  </select>
+                  <button
+                    class="btn btn-outline-secondary btn-sm"
+                    (click)="selectedType = ''"
+                    *ngIf="selectedType"
+                  >
+                    Réinitialiser
+                  </button>
+                </div>
+              </div>
+
+              <!-- Action History Table -->
               <div class="col">
-                <table class="table mt-4">
-                  <thead>
+                <table class="table table-bordered table-striped">
+                  <thead class="table-light">
                     <tr>
-                      <th>Utilisateur</th>
+                      <th>Type</th>
                       <th>Action</th>
+                      <th>Entité ID</th>
                       <th>Date</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let action of actions">
-                      <td>{{ action.utilisateur?.nom }}</td>
+                    <tr *ngFor="let action of filteredActions()">
+                      <td>
+                        <span
+                          class="badge"
+                          [ngClass]="{
+                            'bg-primary':
+                              getType(action.action) === 'Utilisateur',
+                            'bg-success': getType(action.action) === 'Role',
+                            'bg-secondary': getType(action.action) === 'Autre'
+                          }"
+                        >
+                          {{ getType(action.action) }}
+                        </span>
+                      </td>
                       <td>{{ action.action }}</td>
-                      <td>{{ action.date | date : "short" }}</td>
+                      <td>{{ action.entityId || "N/A" }}</td>
+                      <td>{{ action.date | date : "medium" }}</td>
+                    </tr>
+                    <tr *ngIf="filteredActions().length === 0">
+                      <td colspan="4" class="text-center text-muted">
+                        Aucune action trouvée
+                      </td>
                     </tr>
                   </tbody>
                 </table>
